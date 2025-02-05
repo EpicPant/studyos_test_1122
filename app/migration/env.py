@@ -17,6 +17,7 @@ from module.models import Module
 from course.models import Course
 from topic.models import Topic
 from card.models import Card
+from last_recently.model import last_recent
 
 config = context.config
 config.set_main_option("sqlalchemy.url", get_db_url())

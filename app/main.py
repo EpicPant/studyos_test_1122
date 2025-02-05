@@ -6,6 +6,7 @@ from course.router import router as course_router
 from module.router import router as module_router
 from topic.router import router as topic_router
 from card.router import router as card_router
+from last_recently.router import router as last_recent_router
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
@@ -36,3 +37,4 @@ app.include_router(module_router)
 app.include_router(course_router)
 app.include_router(topic_router)
 app.include_router(card_router)
+app.include_router(last_recent_router)

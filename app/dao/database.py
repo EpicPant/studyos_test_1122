@@ -6,7 +6,14 @@ from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_
 
 from config import get_db_url
 DB_URL = get_db_url()
-engine = create_async_engine(url=DB_URL)
+engine = create_async_engine(
+    url=DB_URL,
+    echo=True,
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,
+    pool_pre_ping=True
+)
 async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 str_uniq = Annotated[str, mapped_column(unique=True, nullable=False)]
 

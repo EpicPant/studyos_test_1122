@@ -10,11 +10,40 @@ from dao.session_maker import SessionDep
 
 
 def get_token(request: Request):
-    token = request.cookies.get('users_access_token')
+    token = request.cookies.get('user_access_token')
     if not token:
         raise TokenNoFound
     return token
 
+def get_refresh_token(request: Request) -> str:
+    """Извлекаем refresh_token из кук."""
+    token = request.cookies.get('user_refresh_token')
+    if not token:
+        raise TokenNoFound
+    return token
+
+async def check_refresh_token(
+        token: str = Depends(get_refresh_token),
+        session: AsyncSession = SessionDep
+) -> User:
+    """ Проверяем refresh_token и возвращаем пользователя."""
+    try:
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM]
+        )
+        user_id = payload.get("sub")
+        if not user_id:
+            raise NoJwtException
+
+        user = await UsersDAO.find_one_or_none_by_id(session=session, data_id=int(user_id))
+        if not user:
+            raise NoJwtException
+
+        return user
+    except JWTError:
+        raise NoJwtException
 
 async def get_current_user(token: str | None = Depends(get_token), session: AsyncSession = SessionDep):
     print(token)

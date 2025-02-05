@@ -1,3 +1,8 @@
+
+CLAUDE_API_KEY = "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"
+OPENAI_API_KEY = "sk-rNiuQeFG7pLzTjMKV1snb2jyMm8QA8gE"
+DEEPGRAM_API_KEY = "157e7dae07440188ab6eb4c528ce7128594b6a03"
+
 PARTS_PROMT =  """You are tasked with analyzing a lecture text and identifying its main topics and subtopics. Your goal is to create a structured list of the lecture's key points without providing the content of each topic. Here's the lecture text you need to analyze:
 
 <lecture_text>
