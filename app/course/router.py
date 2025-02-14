@@ -24,7 +24,7 @@ with open("course/testing_data.json", "r") as file:
 
 router = APIRouter(prefix='/course', tags=['Course'])
 
-@router.post("/create_course/", summary="создание курса")
+@router.post("/create_course", summary="создание курса")
 async def create_course(
     course_data: CourseCreate, 
     current_user: User = Depends(get_current_user), 
@@ -115,3 +115,47 @@ async def get_course(
         raise HTTPException(status_code=403, detail="Нет доступа к курсу")
         
     return {"course": course}
+
+@router.delete("/delete_course/{course_id}", summary="Удаление курса по id")
+async def delete_course(
+    course_id: int,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = TransactionSessionDep
+):
+    course = await CourseDAO.find_one_or_none_by_id(course_id, session)
+    if not course:
+        raise HTTPException(status_code=404, detail="Курс не найден")
+    
+    module = await ModuleDAO.find_one_or_none_by_id(course.module_id, session)
+    sphere = await SphereDAO.find_one_or_none_by_id(module.sphere_id, session)
+    
+    if sphere.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Нет доступа к курсу")
+    
+    delete_filter = CourseFilter(id=course_id, module_id=course.module_id)
+    await CourseDAO.delete(session=session, filters=delete_filter)
+    return {"message": "Курс удален"}
+
+@router.put("/update_course/{course_id}", summary="Обновление курса по id")
+async def update_course(
+    course_id: int,
+    course_data: CourseCreate,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = TransactionSessionDep
+):
+    course = await CourseDAO.find_one_or_none_by_id(course_id, session)
+    if not course:
+        raise HTTPException(status_code=404, detail="Курс не найден")
+    
+    module = await ModuleDAO.find_one_or_none_by_id(course.module_id, session)
+    sphere = await SphereDAO.find_one_or_none_by_id(module.sphere_id, session)
+    
+    if sphere.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Нет доступа к курсу")
+    
+    course_dict = course_data.model_dump()
+    course_link = course_dict["link"]
+    del course_dict["link"]
+    
+    course = await CourseDAO.update(session=session, id=course_id, values=course_dict)
+    return {"message": "Курс обновлен"}

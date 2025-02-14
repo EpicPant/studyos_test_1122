@@ -18,4 +18,5 @@ class Sphere(SphereBase):
         orm_mode = True
 
 class SphereFilter(BaseModel):
+    id: int 
     user_id: int

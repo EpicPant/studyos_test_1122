@@ -18,5 +18,6 @@ class Course(CourseBase):
         orm_mode = True
 
 class CourseFilter(BaseModel):
+    id: int = Field(..., description="ID курса для фильтрации")
     module_id: int = Field(..., description="ID модуля для фильтрации курсов")
         

@@ -10,4 +10,5 @@ class Card(BaseModel):
     info: dict # Добавляем обязательное поле info
 
 class CardFilter(BaseModel):
+    id: int
     topic_id: int

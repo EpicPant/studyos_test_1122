@@ -13,7 +13,7 @@ class Sphere(Base):
     icon: Mapped[str]
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'))
     user: Mapped["User"] = relationship("User", back_populates="spheres")
-    modules: Mapped[list["Module"]] = relationship("Module", back_populates="sphere")
+    modules: Mapped[list["Module"]] = relationship("Module", back_populates="sphere", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id})"

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class Topic(Base):
     name: Mapped[str]
     text: Mapped[str]
-    cards: Mapped[list["Card"]] = relationship("Card", back_populates="topic")  # Исправлено на cards
+    cards: Mapped[list["Card"]] = relationship("Card", back_populates="topic", cascade="all, delete-orphan")  # Исправлено на cards
     course_id: Mapped[int] = mapped_column(Integer, ForeignKey('courses.id'))
     course: Mapped["Course"] = relationship("Course", back_populates="topics") 
     

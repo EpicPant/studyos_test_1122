@@ -10,4 +10,5 @@ class ModuleCreate(ModuleBase):
         orm_mode = True
 
 class ModuleFilter(BaseModel):
+    id: int = None
     sphere_id: int

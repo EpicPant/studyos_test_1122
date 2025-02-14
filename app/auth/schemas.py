@@ -15,7 +15,7 @@ class UserBase(EmailModel):
 
 
 
-class SUserRegister(UserBase):
+class SUserRegister(EmailModel):
     password: str = Field(min_length=5, max_length=50, description="Пароль, от 5 до 50 знаков")
     confirm_password: str = Field(min_length=5, max_length=50, description="Повторите пароль")
 

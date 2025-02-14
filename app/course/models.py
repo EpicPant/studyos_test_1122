@@ -13,7 +13,7 @@ class Course(Base):
 
     module_id: Mapped[int] = mapped_column(Integer, ForeignKey('modules.id'))
     module: Mapped["Module"] = relationship("Module", back_populates="courses")
-    topics: Mapped[list["Topic"]] = relationship("Topic", back_populates="course", lazy="joined")  # Связь с темами
+    topics: Mapped[list["Topic"]] = relationship("Topic", back_populates="course", lazy="joined", cascade="all, delete-orphan")  # Связь с темами
 
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id})"

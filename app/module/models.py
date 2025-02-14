@@ -11,10 +11,10 @@ if TYPE_CHECKING:
 
 class Module(Base):
     name: Mapped[str]
-    icon: Mapped[str]
+    #icon: Mapped[str]
     sphere_id: Mapped[int] = mapped_column(Integer, ForeignKey('spheres.id'))
     sphere: Mapped["Sphere"] = relationship("Sphere", back_populates="modules")
-    courses: Mapped[list["Course"]] = relationship("Course", back_populates="module")
+    courses: Mapped[list["Course"]] = relationship("Course", back_populates="module", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id})"
